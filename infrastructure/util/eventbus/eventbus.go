@@ -26,6 +26,7 @@ type BusController interface {
 	WaitAsync()
 }
 
+
 //Bus 总线
 type Bus interface {
 	BusController
@@ -127,18 +128,18 @@ func (bus *EventBus) Publish(topic string, args ...interface{}) {
 			return
 		}
 
-		for i, handler := range handlers {
-			if handler.flagOnce {
+		for i := range handlers[:] {
+			if handlers[i].flagOnce {
 				bus.removeHandler(topic, i)
 			}
-			if !handler.async {
-				bus.doPublish(handler, topic, args...)
+			if !handlers[i].async {
+				bus.doPublish(handlers[i], topic, args...)
 			} else {
 				bus.wg.Add(1)
-				if handler.transactional {
-					handler.Lock()
+				if handlers[i].transactional {
+					handlers[i].Lock()
 				}
-				go bus.doPublishAsync(handler, topic, args...)
+				go bus.doPublishAsync(handlers[i], topic, args...)
 			}
 		}
 	}
@@ -181,10 +182,10 @@ func (bus *EventBus) findHandlerIdx(topic string, callback reflect.Value) int {
 
 	if handlerInterface, ok := bus.handlers.Load(topic); ok {
 		handlers := handlerInterface.([]*eventHandler)
-		for idx, handler := range handlers {
-			if handler.callBack.Type() == callback.Type() &&
-				handler.callBack.Pointer() == callback.Pointer() {
-				return idx
+		for i := range handlers[:] {
+			if handlers[i].callBack.Type() == callback.Type() &&
+				handlers[i].callBack.Pointer() == callback.Pointer() {
+				return i
 			}
 		}
 	}
@@ -194,11 +195,11 @@ func (bus *EventBus) findHandlerIdx(topic string, callback reflect.Value) int {
 func (bus *EventBus) setUpPublish(callback *eventHandler, args ...interface{}) []reflect.Value {
 	funcType := callback.callBack.Type()
 	passedArguments := make([]reflect.Value, len(args))
-	for i, v := range args {
-		if v == nil {
+	for i := range args[:] {
+		if args[i] == nil {
 			passedArguments[i] = reflect.New(funcType.In(i)).Elem()
 		} else {
-			passedArguments[i] = reflect.ValueOf(v)
+			passedArguments[i] = reflect.ValueOf(args[i])
 		}
 	}
 
