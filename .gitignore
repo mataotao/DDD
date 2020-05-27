@@ -12,4 +12,4 @@ loginout
 /pkg
 /bin
 /log
-/infrastructure/config/config.yaml
+/infrastructure/config/conf/config.yaml
