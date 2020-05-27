@@ -16,14 +16,14 @@ log:
   max_backups: 30
   max_age: 7
 db:
-  name: DDD
-  addr: mysql:3306
+  name: ddd
+  addr: 10.108.42.150:3306
   username: root
   password: root
   max_open_conns: 100 #最大连接数
   wet_max_idle_conns: 0 #闲置连接数
   conn_max_lifetime: 300 #超时时间
 redis:
-  addr: redis:6379
+  addr: 10.98.144.113:6379
   pwd: immt
   db: 0

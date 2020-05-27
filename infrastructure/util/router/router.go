@@ -5,7 +5,7 @@ import (
 	"DDD/infrastructure/util/router/middleware/limiter"
 	"DDD/interfaces/facade/sd"
 
-	"github.com/gin-contrib/pprof"
+	//"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 
 	"net/http"
@@ -18,7 +18,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.Use(mw...)
 	g.Use(middleware.RequestId())
 
-	pprof.Register(g)
+	//pprof.Register(g)
 	// 404 Handler.
 	g.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "The incorrect API route.")
