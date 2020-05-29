@@ -13,8 +13,8 @@ const (
 )
 
 var MqBusMq = map[int8]Mq{
-	EventStreams: Mq(new(streams)),
-	//EventRabbitMqDelay: delayed,
+	EventStreams:       Mq(new(streams)),
+	EventRabbitMqDelay: Mq(new(delayed)),
 }
 
 type Mq interface {
@@ -34,6 +34,7 @@ type mqBusEvent struct {
 	datetime string
 	source   string
 	data     string
+	headers  map[string]interface{}
 }
 type MessageQueueBus struct {
 }
