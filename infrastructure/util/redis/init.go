@@ -2,10 +2,12 @@ package redis
 
 import (
 	log "DDD/infrastructure/config/config"
-	"bytes"
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+
+	"bytes"
 	"strconv"
 )
 
